@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "RisohEditorWinUI3Blank (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "RisohEditorWinUI3Blank (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

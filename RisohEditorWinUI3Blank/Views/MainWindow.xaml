@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="RisohEditorWinUI3Blank.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RisohEditorWinUI3Blank"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d"
+    Closed="Window_Closed"
+    Title="RisohEditorWinUI3Blank">
+
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+
+    <Grid x:Name="RootGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="7*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- 菜单栏（保持不变） -->
+        <muxc:MenuBar Grid.Row="0" Grid.ColumnSpan="2">
+            <muxc:MenuBarItem Title="文件">
+                <MenuFlyoutItem Text="新建" Click="New_Click"/>
+                <MenuFlyoutItem Text="打开..." Click="Open_Click"/>
+                <MenuFlyoutItem Text="保存" Click="Save_Click"/>
+                <MenuFlyoutSeparator/>
+                <MenuFlyoutItem Text="退出" Click="Exit_Click"/>
+            </muxc:MenuBarItem>
+
+            <muxc:MenuBarItem Title="编辑">
+                <MenuFlyoutItem Text="撤销" Click="Undo_Click"/>
+                <MenuFlyoutItem Text="重做" Click="Redo_Click"/>
+                <MenuFlyoutSeparator/>
+                <MenuFlyoutItem Text="剪切" Click="Cut_Click"/>
+                <MenuFlyoutItem Text="复制" Click="Copy_Click"/>
+                <MenuFlyoutItem Text="粘贴" Click="Paste_Click"/>
+            </muxc:MenuBarItem>
+
+            <muxc:MenuBarItem Title="视图">
+                <MenuFlyoutItem Text="切换侧边栏" Click="ToggleSidebar_Click"/>
+                <MenuFlyoutItem Text="放大" Click="ZoomIn_Click"/>
+                <MenuFlyoutItem Text="缩小" Click="ZoomOut_Click"/>
+            </muxc:MenuBarItem>
+
+            <muxc:MenuBarItem Title="设置">
+                <MenuFlyoutItem Text="首选项..." Click="Preferences_Click"/>
+                <MenuFlyoutItem Text="关于" Click="About_Click"/>
+            </muxc:MenuBarItem>
+        </muxc:MenuBar>
+
+        <!-- 左侧：树形目录 -->
+        <muxc:TreeView x:Name="m_treeView" Grid.Row="1" Grid.Column="0" SelectionChanged="m_treeView_SelectionChanged" ItemInvoked="NavigationTree_ItemInvoked"/>
+
+        <!-- 右侧：内容区，改为 TabView 并占满整个单元格 -->
+        <muxc:TabView
+            x:Name="MainTabView"
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+
+            <!-- 主文档/编辑页（保留原有绑定显示） -->
+            <muxc:TabViewItem Header="文档" x:Name="DocTab">
+                <!-- 在 Border 上保留内边距以提供视觉间距 -->
+                <Border Background="{ThemeResource SystemControlBackgroundAltHighBrush}" CornerRadius="4" Margin="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <ScrollViewer>
+                        <StackPanel Padding="12">
+                            <TextBlock x:Name="ContentTitle" Text="{Binding ContentTitle, Mode=OneWay}" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                            <TextBox IsReadOnly="True" x:Name="m_codeEditor" Text="{Binding ContentText, Mode=OneWay}" TextWrapping="Wrap"/>
+                            <Image x:Name="image1" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+            </muxc:TabViewItem>
+
+            <!-- 示例：属性/视图页（占位） -->
+            <muxc:TabViewItem Header="属性" x:Name="PropertiesTab">
+                <StackPanel Padding="12">
+                    <TextBox x:Name="m_hexViewer" IsReadOnly="True" Text="属性面板占位符" />
+                </StackPanel>
+            </muxc:TabViewItem>
+        </muxc:TabView>
+    </Grid>
+</Window>
