@@ -3,7 +3,7 @@ using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Media.Imaging;
+using Microsoft.UI.Xaml.Media.Imaging; 
 using RisohEditorWinUI3Blank.Models;
 using System;
 using System.Diagnostics;
@@ -15,9 +15,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using WinRT.Interop;
-
-using MyTool;
 
 namespace RisohEditorWinUI3Blank
 {
@@ -413,13 +412,16 @@ namespace RisohEditorWinUI3Blank
         {
             try
             {
-                var savePicker = new FileSavePicker();
+                var picker = new FileSavePicker();
+                var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+                InitializeWithWindow.Initialize(picker, hwnd);
                 // 必须设置至少一个文件类型
-                savePicker.FileTypeChoices.Add("可执行文件", new[] { @"*.exe;*.dll;*.ocx;*.cpl;*.scr" });
+                picker.FileTypeChoices.Add("可执行文件(*.exe)", new[] { @".exe" });
+                picker.FileTypeChoices.Add("动态链接库(*.dll)", new[] { @".dll" });
                 //savePicker.FileTypeChoices.Add("可执行文件", new[] { @"*.exe;*.dll;*.ocx;*.cpl;*.scr" });
-                savePicker.SuggestedFileName = "Untitled";
+                picker.SuggestedFileName = "Untitled";
 
-                StorageFile file = await savePicker.PickSaveFileAsync();
+                StorageFile file = await picker.PickSaveFileAsync();
                 if (file != null)
                 {
                     // 用户选择了文件，可以写入内容
@@ -434,7 +436,7 @@ namespace RisohEditorWinUI3Blank
                     return false;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -1181,8 +1183,8 @@ namespace RisohEditorWinUI3Blank
             }
             else
             {
-                MyTool.BitmapHelper.ParseAndDisplayBitmap(entry.Data, image1);
-                string debugInfo = BitmapHelper.GetDetailedAnalysis(entry.Data);
+                //MyTool.BitmapHelper.ParseAndDisplayBitmap(entry.Data, image1);
+                //string debugInfo = BitmapHelper.GetDetailedAnalysis(entry.Data);
                 //m_bmpView.BackgroundImage = null;
                 //m_bmpView.BackColor = SystemColors.Control;
             }
@@ -1194,6 +1196,34 @@ namespace RisohEditorWinUI3Blank
                 OnGuiEdit();
             }
         }
+
+        async Task<byte[]?> ReadFileFromLocalFolderAsync(string folder, string fileName)
+        {
+            try
+            {
+                StorageFolder localFolder = await StorageFolder.GetFolderFromPathAsync(folder);// ApplicationData.Current.LocalFolder;
+                StorageFile storageFile = await localFolder.GetFileAsync(fileName);
+                return await ReadStorageFileAsBytesAsync(storageFile);
+            }
+            catch (FileNotFoundException ex)
+            {
+                // 文件不存在
+                return null;
+            }
+        }
+
+
+        async Task<byte[]> ReadStorageFileAsBytesAsync(StorageFile file)
+        {
+            using var stream = await file.OpenReadAsync();
+            using var reader = new DataReader(stream.GetInputStreamAt(0));
+            await reader.LoadAsync((uint)stream.Size);
+            var buffer = new byte[stream.Size];
+            reader.ReadBytes(buffer);
+            return buffer;
+        }
+
+
         private void ChangeStatusText(string text)
         {
             //if (m_statusBar.Items.Count > 0)
