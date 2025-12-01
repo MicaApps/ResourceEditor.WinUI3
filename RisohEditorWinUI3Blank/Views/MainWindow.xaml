@@ -28,20 +28,53 @@
         <!-- 菜单栏（保持不变） -->
         <muxc:MenuBar Grid.Row="0" Grid.ColumnSpan="2">
             <muxc:MenuBarItem Title="文件">
-                <MenuFlyoutItem Text="新建" Click="New_Click"/>
-                <MenuFlyoutItem Text="打开..." Click="Open_Click"/>
-                <MenuFlyoutItem Text="保存" Click="Save_Click"/>
+                <MenuFlyoutItem Text="新建" Click="New_Click">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="N"/>
+                    </MenuFlyoutItem.KeyboardAccelerators>
+
+                </MenuFlyoutItem>
+                <MenuFlyoutItem Text="打开..." Click="Open_Click">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="O"/>
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem Text="保存" Click="Save_Click">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="S"/>
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
-                <MenuFlyoutItem Text="退出" Click="Exit_Click"/>
+                <MenuFlyoutItem Text="退出" Click="Exit_Click">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="E"/>
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
             </muxc:MenuBarItem>
 
             <muxc:MenuBarItem Title="编辑">
-                <MenuFlyoutItem Text="撤销" Click="Undo_Click"/>
+                <MenuFlyoutItem Text="撤销" Click="Undo_Click">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="Z"/>
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
                 <MenuFlyoutItem Text="重做" Click="Redo_Click"/>
                 <MenuFlyoutSeparator/>
-                <MenuFlyoutItem Text="剪切" Click="Cut_Click"/>
-                <MenuFlyoutItem Text="复制" Click="Copy_Click"/>
-                <MenuFlyoutItem Text="粘贴" Click="Paste_Click"/>
+                <MenuFlyoutItem Text="剪切" Click="Cut_Click">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="X"/>
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem Text="复制" Click="Copy_Click">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="C"/>
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem Text="粘贴" Click="Paste_Click">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="V"/>
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
             </muxc:MenuBarItem>
 
             <muxc:MenuBarItem Title="视图">
@@ -92,12 +125,12 @@
 
             <!-- 示例：属性/视图页（占位） -->
             <muxc:TabViewItem Header="十六进制" x:Name="PropertiesTab">
-                <StackPanel Padding="12">
+                
                     <ScrollViewer HorizontalScrollBarVisibility="Auto"
     VerticalScrollBarVisibility="Visible">
                         <TextBox x:Name="m_hexViewer" IsReadOnly="True" Text="属性面板占位符"  AcceptsReturn="True"/>
                     </ScrollViewer>
-                </StackPanel>
+
             </muxc:TabViewItem>
         </muxc:TabView>
     </Grid>
